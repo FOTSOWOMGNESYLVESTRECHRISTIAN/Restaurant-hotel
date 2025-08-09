@@ -7,6 +7,9 @@ if (isset($_SESSION['Email'])) {
     header('location: index.php');
     exit();
 }
+
+// Détermine la page de redirection souhaitée après connexion
+$redirect_to = isset($_GET['redirect']) ? $_GET['redirect'] : 'index.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -120,6 +123,8 @@ if (isset($_SESSION['Email'])) {
                                 </label>
                             </div>
 
+                            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect_to, ENT_QUOTES, 'UTF-8'); ?>" />
+
                             <button type="submit" class="btn btn-login" name="login" id="loginBtn">
                                 <span class="btn-text">
                                     <i class="fas fa-sign-in-alt me-2"></i>Se Connecter
@@ -129,6 +134,16 @@ if (isset($_SESSION['Email'])) {
                                 </span>
                             </button>
                         </form>
+
+                        <div class="divider"><span>ou</span></div>
+                        <div class="social-login">
+                            <a class="btn btn-social btn-google" href="database/google_login.php?redirect=<?php echo urlencode($redirect_to); ?>">
+                                <i class="fab fa-google me-2"></i>Se connecter avec Google
+                            </a>
+                            <a class="btn btn-social btn-facebook" href="database/facebook_login.php?redirect=<?php echo urlencode($redirect_to); ?>">
+                                <i class="fab fa-facebook-f me-2"></i>Se connecter avec Facebook
+                            </a>
+                        </div>
 
                         <div class="login-footer">
                             <p class="text-center mb-3">
@@ -390,6 +405,50 @@ if (isset($_SESSION['Email'])) {
             color: var(--secondary-color);
             text-decoration: none;
         }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 2rem 0 1.25rem 0;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .btn-social {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-dark);
+            text-align: center;
+        }
+        .btn-social:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-google:hover { border-color: #DB4437; color: #DB4437; }
+        .btn-facebook:hover { border-color: #4267B2; color: #4267B2; }
 
         /* Responsive Design */
         @media (max-width: 768px) {

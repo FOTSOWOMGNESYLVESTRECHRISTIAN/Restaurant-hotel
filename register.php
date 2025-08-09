@@ -7,6 +7,9 @@ if (isset($_SESSION['Email'])) {
     header('location: userprofile.php');
     exit();
 }
+
+// Détermine la page de redirection souhaitée après inscription
+$redirect_to = isset($_GET['redirect']) ? $_GET['redirect'] : 'userprofile.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -200,6 +203,8 @@ if (isset($_SESSION['Email'])) {
                                 </label>
                             </div>
 
+                            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($redirect_to, ENT_QUOTES, 'UTF-8'); ?>" />
+
                             <button type="submit" class="btn btn-register" name="insert" id="registerBtn">
                                 <span class="btn-text">
                                     <i class="fas fa-user-plus me-2"></i>Créer mon Compte
@@ -221,12 +226,12 @@ if (isset($_SESSION['Email'])) {
                                 <span>ou</span>
                             </div>
                             <div class="social-register">
-                                <button class="btn btn-social btn-google">
+                                <a class="btn btn-social btn-google" href="database/google_login.php?redirect=<?php echo urlencode($redirect_to); ?>">
                                     <i class="fab fa-google me-2"></i>S'inscrire avec Google
-                                </button>
-                                <button class="btn btn-social btn-facebook">
+                                </a>
+                                <a class="btn btn-social btn-facebook" href="database/facebook_login.php?redirect=<?php echo urlencode($redirect_to); ?>">
                                     <i class="fab fa-facebook-f me-2"></i>S'inscrire avec Facebook
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
