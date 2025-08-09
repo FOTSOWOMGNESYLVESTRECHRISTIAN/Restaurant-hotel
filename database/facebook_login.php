@@ -3,17 +3,47 @@ session_start();
 require 'connection.php';
 require 'oauth_config.php';
 
+function base_url() {
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    return $scheme . '://' . $host . $dir;
+}
+
+function safe_redirect_path($path) {
+    if (empty($path)) return '../index.php';
+    if (preg_match('/^https?:\/\//i', $path) || strpos($path, '//') === 0) {
+        return '../index.php';
+    }
+    $path = ltrim($path, "/");
+    $allowed = ['index.php','userprofile.php','cart.php','category.php','food.php','aboutus.php'];
+    if (in_array($path, $allowed, true)) return '../' . $path;
+    return '../index.php';
+}
+
+$final_redirect = isset($_GET['redirect']) ? $_GET['redirect'] : 'index.php';
+$runtime_redirect_uri = base_url() . '/facebook_login.php';
+
 // Si l'utilisateur n'est pas connecté via Facebook, rediriger vers l'autorisation
 if (!isset($_GET['code'])) {
     $auth_url = FACEBOOK_AUTH_URL . '?' . http_build_query([
         'client_id' => FACEBOOK_APP_ID,
-        'redirect_uri' => FACEBOOK_REDIRECT_URI,
+        'redirect_uri' => $runtime_redirect_uri,
         'scope' => 'email,public_profile',
-        'response_type' => 'code'
+        'response_type' => 'code',
+        'state' => urlencode($final_redirect)
     ]);
     
     header('Location: ' . $auth_url);
     exit();
+}
+
+// Récupérer le redirect demandé via state si présent
+if (isset($_GET['state'])) {
+    $decoded = urldecode($_GET['state']);
+    if (!empty($decoded)) {
+        $final_redirect = $decoded;
+    }
 }
 
 // Si on a un code d'autorisation, traiter la connexion
@@ -25,7 +55,7 @@ if (isset($_GET['code'])) {
         'client_id' => FACEBOOK_APP_ID,
         'client_secret' => FACEBOOK_APP_SECRET,
         'code' => $code,
-        'redirect_uri' => FACEBOOK_REDIRECT_URI
+        'redirect_uri' => $runtime_redirect_uri
     ];
     
     $ch = curl_init();
@@ -68,7 +98,7 @@ if (isset($_GET['code'])) {
                 $_SESSION['PhoneNo'] = $user['PhoneNo'];
                 $_SESSION['Address'] = $user['Address'];
                 
-                header('location: ../index.php');
+                header('location: ' . safe_redirect_path($final_redirect));
                 exit();
             } else {
                 // Créer un nouveau compte
@@ -84,7 +114,7 @@ if (isset($_GET['code'])) {
                     $_SESSION['PhoneNo'] = '';
                     $_SESSION['Address'] = '';
                     
-                    header('location: ../index.php');
+                    header('location: ' . safe_redirect_path($final_redirect));
                     exit();
                 } else {
                     echo "<script>alert('Erreur lors de la création du compte !');

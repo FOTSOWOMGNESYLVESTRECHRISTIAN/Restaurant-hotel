@@ -5,12 +5,14 @@
 // Configuration Google OAuth
 define('GOOGLE_CLIENT_ID', 'YOUR_GOOGLE_CLIENT_ID');
 define('GOOGLE_CLIENT_SECRET', 'YOUR_GOOGLE_CLIENT_SECRET');
-define('GOOGLE_REDIRECT_URI', 'http://localhost/cantine-main/database/google_callback.php');
+// NOTE: Les scripts google_login.php et facebook_login.php génèrent dynamiquement l'URI de redirection en fonction de l'hôte actuel
+// Vous devez configurer dans la console Google/Facebook l'URL exacte de callback correspondante, par exemple:
+// https://votre-domaine.tld/database/google_login.php
+// https://votre-domaine.tld/database/facebook_login.php
 
 // Configuration Facebook OAuth
 define('FACEBOOK_APP_ID', 'YOUR_FACEBOOK_APP_ID');
 define('FACEBOOK_APP_SECRET', 'YOUR_FACEBOOK_APP_SECRET');
-define('FACEBOOK_REDIRECT_URI', 'http://localhost/cantine-main/database/facebook_callback.php');
 
 // URLs de base pour les APIs
 define('GOOGLE_AUTH_URL', 'https://accounts.google.com/o/oauth2/v2/auth');
