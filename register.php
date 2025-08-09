@@ -1,0 +1,769 @@
+<?php
+session_start();
+require 'database/connection.php';
+
+// Rediriger si déjà connecté
+if (isset($_SESSION['Email'])) {
+    header('location: userprofile.php');
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>FoodTiger - Créer un Compte</title>
+    <link rel="shortcut icon" type="image/x-icon" href="image/logo 256x256.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Créez votre compte FoodTiger - Restaurant gastronomique d'excellence">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/nav-bar.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <?php require "navandfooter/nav.php"; ?>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="index.php" class="breadcrumb-link">
+                                    <i class="fas fa-home me-2"></i>Accueil
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Créer un Compte
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="hero-content" data-aos="fade-up">
+                <h1 class="hero-title">Créer un Compte</h1>
+                <p class="hero-subtitle">Rejoignez FoodTiger et découvrez une expérience culinaire exceptionnelle</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Section -->
+    <section class="register-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 col-sm-12">
+                    <div class="register-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="register-header">
+                            <div class="register-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h2>Inscription</h2>
+                            <p>Créez votre compte en quelques étapes simples</p>
+                        </div>
+
+                        <form class="register-form" action="database/registercode.php" method="POST" id="registerForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Name" class="form-label">
+                                            <i class="fas fa-user me-2"></i>Nom d'utilisateur
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="Name" 
+                                               name="Name" 
+                                               placeholder="Entrez votre nom d'utilisateur"
+                                               required>
+                                        <div class="invalid-feedback">
+                                            Le nom d'utilisateur doit contenir entre 5 et 30 caractères.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Email" class="form-label">
+                                            <i class="fas fa-envelope me-2"></i>Adresse Email
+                                        </label>
+                                        <input type="email" 
+                                               class="form-control" 
+                                               id="Email" 
+                                               name="Email" 
+                                               placeholder="Entrez votre email"
+                                               required>
+                                        <div class="invalid-feedback">
+                                            Veuillez entrer une adresse email valide.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="PhoneNo" class="form-label">
+                                            <i class="fas fa-phone me-2"></i>Numéro de Téléphone
+                                        </label>
+                                        <input type="tel" 
+                                               class="form-control" 
+                                               id="PhoneNo" 
+                                               name="PhoneNo" 
+                                               placeholder="Entrez votre numéro de téléphone"
+                                               required>
+                                        <div class="invalid-feedback">
+                                            Veuillez entrer un numéro de téléphone valide.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Address" class="form-label">
+                                            <i class="fas fa-map-marker-alt me-2"></i>Adresse
+                                        </label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="Address" 
+                                               name="Address" 
+                                               placeholder="Entrez votre adresse"
+                                               required>
+                                        <div class="invalid-feedback">
+                                            L'adresse est requise.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Password" class="form-label">
+                                            <i class="fas fa-lock me-2"></i>Mot de passe
+                                        </label>
+                                        <div class="password-input-group">
+                                            <input type="password" 
+                                                   class="form-control" 
+                                                   id="Password" 
+                                                   name="Password" 
+                                                   placeholder="Entrez votre mot de passe"
+                                                   required>
+                                            <button type="button" class="password-toggle" onclick="togglePassword('Password', 'passwordIcon1')">
+                                                <i class="fas fa-eye" id="passwordIcon1"></i>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Le mot de passe doit contenir au moins 6 caractères.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Password2" class="form-label">
+                                            <i class="fas fa-lock me-2"></i>Confirmer le Mot de passe
+                                        </label>
+                                        <div class="password-input-group">
+                                            <input type="password" 
+                                                   class="form-control" 
+                                                   id="Password2" 
+                                                   name="Password2" 
+                                                   placeholder="Confirmez votre mot de passe"
+                                                   required>
+                                            <button type="button" class="password-toggle" onclick="togglePassword('Password2', 'passwordIcon2')">
+                                                <i class="fas fa-eye" id="passwordIcon2"></i>
+                                            </button>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Les mots de passe ne correspondent pas.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    J'accepte les <a href="#!" class="terms-link">Conditions d'Utilisation</a> et la <a href="#!" class="terms-link">Politique de Confidentialité</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-register" name="insert" id="registerBtn">
+                                <span class="btn-text">
+                                    <i class="fas fa-user-plus me-2"></i>Créer mon Compte
+                                </span>
+                                <span class="btn-loading d-none">
+                                    <i class="fas fa-spinner fa-spin me-2"></i>Création du compte...
+                                </span>
+                            </button>
+                        </form>
+
+                        <div class="register-footer">
+                            <p class="text-center mb-3">
+                                Déjà un compte ? 
+                                <a href="login.php" class="login-link">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Se Connecter
+                                </a>
+                            </p>
+                            <div class="divider">
+                                <span>ou</span>
+                            </div>
+                            <div class="social-register">
+                                <button class="btn btn-social btn-google">
+                                    <i class="fab fa-google me-2"></i>S'inscrire avec Google
+                                </button>
+                                <button class="btn btn-social btn-facebook">
+                                    <i class="fab fa-facebook-f me-2"></i>S'inscrire avec Facebook
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <?php require "navandfooter/footer.php"; ?>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #FFBD00;
+            --secondary-color: #FF8A00;
+            --accent-color: #FF6B35;
+            --text-dark: #2C3E50;
+            --text-light: #7F8C8D;
+            --bg-light: #F8F9FA;
+            --bg-white: #FFFFFF;
+            --border-color: #E9ECEF;
+            --success-color: #28A745;
+            --danger-color: #DC3545;
+            --warning-color: #FFC107;
+            --info-color: #17A2B8;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 8rem 0 4rem 0;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('image/food.jpg') center/cover;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .breadcrumb-link {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-link:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .register-section {
+            padding: 4rem 0;
+            background: var(--bg-light);
+            min-height: 60vh;
+        }
+
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .register-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(255,189,0,0.3);
+        }
+
+        .register-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .register-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .register-header p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--bg-light);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(255,189,0,0.25);
+            background: white;
+        }
+
+        .password-input-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .terms-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-link:hover {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .btn-register {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255,189,0,0.3);
+            color: var(--text-dark);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .register-footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .login-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link:hover {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .social-register {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-social {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-dark);
+        }
+
+        .btn-social:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-google:hover {
+            border-color: #DB4437;
+            color: #DB4437;
+        }
+
+        .btn-facebook:hover {
+            border-color: #4267B2;
+            color: #4267B2;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .register-card {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+
+            .register-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .social-register {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                padding: 6rem 0 3rem 0;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .register-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+
+    <script>
+        // Initialiser AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+
+        // Toggle password visibility
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const passwordIcon = document.getElementById(iconId);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Form validation and submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const name = document.getElementById('Name').value.trim();
+            const email = document.getElementById('Email').value.trim();
+            const phone = document.getElementById('PhoneNo').value.trim();
+            const address = document.getElementById('Address').value.trim();
+            const password = document.getElementById('Password').value.trim();
+            const password2 = document.getElementById('Password2').value.trim();
+            const terms = document.getElementById('terms').checked;
+            
+            let isValid = true;
+
+            // Reset validation states
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.classList.remove('is-invalid');
+            });
+
+            // Name validation
+            if (!name || name.length < 5 || name.length > 30) {
+                document.getElementById('Name').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Email validation
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('Email').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Phone validation
+            if (!phone || !isValidPhone(phone)) {
+                document.getElementById('PhoneNo').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Address validation
+            if (!address) {
+                document.getElementById('Address').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Password validation
+            if (!password || password.length < 6) {
+                document.getElementById('Password').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Password confirmation validation
+            if (!password2 || password !== password2) {
+                document.getElementById('Password2').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Terms validation
+            if (!terms) {
+                document.getElementById('terms').classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Show loading state
+            const btn = document.getElementById('registerBtn');
+            const btnText = btn.querySelector('.btn-text');
+            const btnLoading = btn.querySelector('.btn-loading');
+
+            btnText.classList.add('d-none');
+            btnLoading.classList.remove('d-none');
+            btn.disabled = true;
+        });
+
+        // Email validation function
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Phone validation function
+        function isValidPhone(phone) {
+            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
+            return phoneRegex.test(phone);
+        }
+
+        // Real-time validation
+        document.getElementById('Name').addEventListener('blur', function() {
+            const name = this.value.trim();
+            if (name && (name.length < 5 || name.length > 30)) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        document.getElementById('Email').addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (email && !isValidEmail(email)) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        document.getElementById('PhoneNo').addEventListener('blur', function() {
+            const phone = this.value.trim();
+            if (phone && !isValidPhone(phone)) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        document.getElementById('Address').addEventListener('blur', function() {
+            const address = this.value.trim();
+            if (!address) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        document.getElementById('Password').addEventListener('blur', function() {
+            const password = this.value.trim();
+            if (password && password.length < 6) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        document.getElementById('Password2').addEventListener('blur', function() {
+            const password = document.getElementById('Password').value.trim();
+            const password2 = this.value.trim();
+            if (password2 && password !== password2) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    </script>
+</body>
+</html>
